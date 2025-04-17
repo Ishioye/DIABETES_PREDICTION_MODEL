@@ -54,7 +54,7 @@ def main():
     HighChol = st.sidebar.radio("High Cholesterol", [0, 1], format_func=lambda x: "Yes" if x == 1 else "No")
     BMI = st.sidebar.number_input("BMI", min_value=10.0, max_value=50.0, value=25.0, step=0.1)
     Smoker = st.sidebar.radio("Smoker (100+ cigarettes in life)", [0, 1], format_func=lambda x: "Yes" if x == 1 else "No")
-    Fruits = st.sidebar.radio("Eat fruit 1+ times per day?", [0, 1], format_func=lambda x: "Yes" if x == 1 else "No")
+    Fruits = st.sidebar.radio("Eat fruits 1+ times per day?", [0, 1], format_func=lambda x: "Yes" if x == 1 else "No")
 
     GenHlth = st.sidebar.selectbox("General Health Rating", [1, 2, 3, 4, 5],
                                    format_func=lambda x: ["Excellent", "Very Good", "Good", "Fair", "Poor"][x - 1])
