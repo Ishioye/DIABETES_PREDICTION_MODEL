@@ -33,7 +33,7 @@ def diabetes_prediction(input_data):
     try:
         input_array = np.array(input_data).reshape(1, -1)
         prediction = model.predict(input_array)
-        return "The person is diabetic" if prediction[0] == 1 else "The person is not diabetic"
+        return "You have diabetes" if prediction[0] == 1 else "You do not have diabetes"
     except Exception as e:
         return f"Error making prediction: {e}"
 
@@ -67,8 +67,8 @@ def main():
                                                       "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80+"][x - 1])
 
     Education = st.sidebar.selectbox("Education", list(range(1, 7)),
-                                     format_func=lambda x: ["No School", "Elementary", "Some High School",
-                                                            "High School Grad", "Some College", "College Grad"][x - 1])
+                                     format_func=lambda x: ["No Formal Education", "Elementary School", "High School Student",
+                                                            "High School Graduate", "College Student", "College Graduate"][x - 1])
     Income = st.sidebar.selectbox("Income", list(range(1, 9)),
                                   format_func=lambda x: ["below $10K", "$10K-$14.9K", "$15K-$19.9K", "$20K-$24.9K",
                                                          "$25K-$34.9K", "$35K-$49.9K", "$50K-$74.9K", "$75K+"][x - 1])
