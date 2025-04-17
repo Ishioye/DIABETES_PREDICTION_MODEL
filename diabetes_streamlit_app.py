@@ -2,13 +2,30 @@ import numpy as np
 import streamlit as st
 from joblib import load
 from PIL import Image
+from pathlib import Path
+import gdown
 
-# Use Streamlit's caching to avoid reloading model every time
+# File paths
+MODEL_PATH = Path("Trained_Diabetes_model.joblib")
+IMAGE_PATH = Path("img.jpeg")
+
+# Google Drive file IDs (replace with actual file IDs)
+MODEL_FILE_ID = "1xojGeZcX1tMlGbJtjNOM86869qBvT4AQ"
+IMAGE_FILE_ID = "1ap7DDQY3TmVvOk7Il60kVu33q_CGreu7"
+
+# Download files from Google Drive if they don't exist
+def download_if_missing(file_path, file_id):
+    if not file_path.exists():
+        url = f"https://drive.google.com/uc?id={file_id}"
+        gdown.download(url, str(file_path), quiet=False)
+
+# Use Streamlit's cache to load model only once
 @st.cache_resource
 def load_model():
-    return load(r"Trained_Diabetes_model.joblib")
+    download_if_missing(MODEL_PATH, MODEL_FILE_ID)
+    return load(MODEL_PATH)
 
-# Load model only once
+# Load the model
 model = load_model()
 
 # Prediction function
@@ -23,11 +40,11 @@ def diabetes_prediction(input_data):
 def main():
     st.title("Diabetes Prediction App")
 
-    # Efficient image loading
+    # Load and display image
     try:
-        with Image.open(r"img.jpeg") as img:
-            img = img.resize((200, 200))
-            st.image(img, width=200)
+        download_if_missing(IMAGE_PATH, IMAGE_FILE_ID)
+        with Image.open(IMAGE_PATH) as img:
+            st.image(img.resize((200, 200)), width=200)
     except Exception:
         st.warning("Image could not be loaded.")
 
