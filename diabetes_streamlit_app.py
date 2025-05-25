@@ -10,7 +10,7 @@ MODEL_PATH = Path("Trained_Diabetes_model.joblib")
 IMAGE_PATH = Path("img.jpeg")
 
 # Google Drive file IDs (replace with actual file IDs)
-MODEL_FILE_ID = "1xojGeZcX1tMlGbJtjNOM86869qBvT4AQ"
+MODEL_FILE_ID = "1Me5eixr2MEpGvyMu_PPiL_xmowQtgpAm"
 IMAGE_FILE_ID = "1ap7DDQY3TmVvOk7Il60kVu33q_CGreu7"
 
 # Download files from Google Drive if they don't exist
