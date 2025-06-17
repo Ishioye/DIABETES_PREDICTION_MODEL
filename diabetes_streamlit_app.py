@@ -1,38 +1,29 @@
 import numpy as np
+import pandas as pd
 import streamlit as st
 from joblib import load
 from PIL import Image
-from pathlib import Path
-import gdown
 
-# File paths
-MODEL_PATH = Path("Trained_Diabetes_model.joblib")
-IMAGE_PATH = Path("img.jpeg")
-
-# Google Drive file IDs (replace with actual file IDs)
-MODEL_FILE_ID = "1Me5eixr2MEpGvyMu_PPiL_xmowQtgpAm"
-IMAGE_FILE_ID = "1ap7DDQY3TmVvOk7Il60kVu33q_CGreu7"
-
-# Download files from Google Drive if they don't exist
-def download_if_missing(file_path, file_id):
-    if not file_path.exists():
-        url = f"https://drive.google.com/uc?id={file_id}"
-        gdown.download(url, str(file_path), quiet=False)
-
-# Use Streamlit's cache to load model only once
+# Use Streamlit's caching to avoid reloading model every time
 @st.cache_resource
 def load_model():
-    download_if_missing(MODEL_PATH, MODEL_FILE_ID)
-    return load(MODEL_PATH)
+    return load("Trained_Diabetes_model.joblib")
 
-# Load the model
+# Load model only once
 model = load_model()
 
 # Prediction function
 def diabetes_prediction(input_data):
     try:
-        input_array = np.array(input_data).reshape(1, -1)
-        prediction = model.predict(input_array)
+        # Define feature names as used during training
+        columns = ['HighBP', 'HighChol', 'BMI', 'Smoker', 'Fruits',
+                   'GenHlth', 'MentHlth', 'PhysHlth', 'Sex', 'Age',
+                   'Education', 'Income']
+
+        # Convert input data to a DataFrame with column names
+        input_df = pd.DataFrame([input_data], columns=columns)
+
+        prediction = model.predict(input_df)
         return "You have diabetes" if prediction[0] == 1 else "You do not have diabetes"
     except Exception as e:
         return f"Error making prediction: {e}"
@@ -40,11 +31,11 @@ def diabetes_prediction(input_data):
 def main():
     st.title("Diabetes Prediction App")
 
-    # Load and display image
+    # Efficient image loading
     try:
-        download_if_missing(IMAGE_PATH, IMAGE_FILE_ID)
-        with Image.open(IMAGE_PATH) as img:
-            st.image(img.resize((200, 200)), width=200)
+        with Image.open("img.jpeg") as img:
+            img = img.resize((200, 200))
+            st.image(img, width=200)
     except Exception:
         st.warning("Image could not be loaded.")
 
